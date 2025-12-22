@@ -2,19 +2,10 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/SectionHeading";
 import { EventCard } from "@/components/EventCard";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { insertRsvpSchema } from "@shared/schema";
-import { useCreateRsvp } from "@/hooks/use-rsvps";
-import { 
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage 
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Countdown } from "@/components/Countdown";
+import { EventSlide } from "@/components/EventSlide";
 import { Button } from "@/components/ui/button";
-import { MapPin, Heart, Music, Phone, Mail, Globe, Sparkles } from "lucide-react";
+import { MapPin, Heart, Music, Phone, Mail, Globe, MessageCircle } from "lucide-react";
 
 export default function Home() {
   const { scrollY } = useScroll();
@@ -31,15 +22,19 @@ export default function Home() {
       
       {/* 1. HERO SECTION */}
       <section id="home" className="h-screen w-full relative flex items-center justify-center overflow-hidden">
-        {/* Background - Himalaya/Mountain feel */}
-        <motion.div style={{ scale: heroScale }} className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a1d3d]/50 to-[#1a1d3d] z-10" />
-          {/* Himalayas / Mountain Landscape */}
+        {/* Background - Himalaya/Mountain feel with proper parallax */}
+        <motion.div 
+          style={{ y: useTransform(scrollY, [0, 1000], [0, 300]) }} 
+          className="absolute inset-0 z-0 w-full h-full"
+        >
           <img 
-            src="https://images.unsplash.com/photo-1519681393784-d8e5b5a4570e?auto=format&fit=crop&q=80&w=2500" 
+            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&q=80&w=2500" 
             alt="Majestic Mountains" 
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover"
+            onLoad={(e) => (e.currentTarget.style.opacity = "1")}
+            style={{ opacity: 0, transition: "opacity 0.5s ease-in-out" }}
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a1d3d]/50 to-[#1a1d3d] z-10" />
         </motion.div>
 
         {/* Floating Particles/Stars */}
@@ -64,9 +59,19 @@ export default function Home() {
             </h1>
             <div className="h-px w-32 bg-primary/60 my-6" />
             <p className="text-xl md:text-2xl font-sans tracking-widest text-white/90 uppercase">
-              December 12th, 2025
+              24th February, 2026
             </p>
             <p className="mt-2 text-white/60 font-serif italic">Udaipur, Rajasthan</p>
+          </motion.div>
+
+          {/* Countdown Timer */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="mt-16 relative z-20"
+          >
+            <Countdown />
           </motion.div>
 
           <motion.div 
@@ -214,15 +219,74 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. RSVP FORM */}
+      {/* 5. HORIZONTAL SCROLLING GALLERY */}
+      <section id="gallery-scroll" className="py-20 px-4 relative overflow-hidden bg-black/40">
+        <div className="max-w-full mx-auto relative z-10 mb-12">
+          <SectionHeading title="Our Journey Together" subtitle="Scroll through our most cherished moments" />
+        </div>
+        
+        <div className="overflow-x-auto pb-8 px-4 md:px-0">
+          <div className="flex gap-6 md:gap-8 w-max">
+            <EventSlide 
+              title="First Meeting"
+              description="Where it all began - a chance encounter that changed everything."
+              image="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600&h=400"
+              delay={0}
+            />
+            <EventSlide 
+              title="Our Adventure"
+              description="Exploring new horizons together, hand in hand through life's journey."
+              image="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600&h=400"
+              delay={0.1}
+            />
+            <EventSlide 
+              title="The Proposal"
+              description="The moment when two souls became one eternal promise."
+              image="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600&h=400"
+              delay={0.2}
+            />
+            <EventSlide 
+              title="Getting Ready"
+              description="The anticipation, the joy, the love evident in every moment."
+              image="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=600&h=400"
+              delay={0.3}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* 6. WHATSAPP RSVP */}
       <section id="rsvp" className="py-24 px-4 relative">
         <div className="absolute inset-0 bg-primary/5 clip-path-slant z-0" />
-        <div className="max-w-2xl mx-auto relative z-10">
-          <SectionHeading title="RSVP" subtitle="Kindly respond by November 1st, 2025" />
+        <div className="max-w-2xl mx-auto relative z-10 text-center">
+          <SectionHeading title="RSVP" subtitle="Kindly respond by January 15th, 2026" />
           
-          <div className="glass-panel p-6 md:p-10 rounded-2xl">
-            <RsvpForm />
-          </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="glass-panel p-10 md:p-16 rounded-2xl flex flex-col items-center gap-8"
+          >
+            <p className="text-lg text-white/80 max-w-md">
+              We'd love to hear from you! Share your joy with us on WhatsApp and let us know if you'll be celebrating with us.
+            </p>
+            
+            <motion.a
+              href="https://wa.me/919876543210?text=Hello%20Aarav%20and%20Diya!%20I'm%20excited%20for%20your%20wedding%20on%20Feb%2024,%202026!"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(212, 175, 55, 0.6)" }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-3 px-8 md:px-12 py-4 bg-gradient-to-r from-primary to-[#f4a460] hover:brightness-110 text-black font-bold rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300"
+            >
+              <MessageCircle size={24} />
+              <span className="text-lg">Send WhatsApp Message</span>
+            </motion.a>
+
+            <p className="text-sm text-white/50 mt-4">
+              Or call us at <span className="text-primary font-semibold">+91 98765 43210</span>
+            </p>
+          </motion.div>
         </div>
       </section>
       
@@ -271,14 +335,20 @@ function NavBar() {
       }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className={`font-serif font-bold text-xl tracking-widest ${scrolled ? 'text-primary' : 'text-white'}`}>
-          A & D
+        <div className={`font-serif font-bold text-lg md:text-xl tracking-widest ${scrolled ? 'text-primary' : 'text-white'}`}>
+          #SHIVAkaBandhan
         </div>
         <div className="hidden md:flex space-x-8">
-          {["Home", "Story", "Events", "Gallery", "RSVP"].map((item) => (
+          {["Home", "Story", "Events", "Journey", "RSVP"].map((item) => (
             <button 
               key={item}
-              onClick={() => document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                if (item === "Journey") {
+                  document.getElementById("gallery-scroll")?.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="text-sm uppercase tracking-widest hover:text-primary transition-colors text-white/90"
             >
               {item}
@@ -307,186 +377,3 @@ function SocialIcon({ icon, href }: { icon: React.ReactNode; href: string }) {
   );
 }
 
-function RsvpForm() {
-  const mutation = useCreateRsvp();
-  
-  const form = useForm<import("@shared/schema").InsertRsvp>({
-    resolver: zodResolver(insertRsvpSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      attendance: "accepts",
-      guestCount: 1,
-      dietaryPreferences: "",
-      message: ""
-    }
-  });
-
-  function onSubmit(data: import("@shared/schema").InsertRsvp) {
-    mutation.mutate(data, {
-      onSuccess: () => {
-        form.reset();
-      }
-    });
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-white/80">Full Name</FormLabel>
-                <FormControl>
-                  <Input 
-                    placeholder="Enter your name" 
-                    {...field} 
-                    className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:border-primary focus:ring-primary/20"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-white/80">Email Address</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="email" 
-                    placeholder="Enter your email" 
-                    {...field} 
-                    className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:border-primary focus:ring-primary/20"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-white/80">Phone Number</FormLabel>
-                <FormControl>
-                  <Input 
-                    placeholder="+91 98765 43210" 
-                    {...field} 
-                    className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:border-primary focus:ring-primary/20"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="guestCount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-white/80">Number of Guests</FormLabel>
-                <Select 
-                  onValueChange={(val) => field.onChange(parseInt(val))} 
-                  defaultValue={field.value.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger className="bg-black/20 border-white/10 text-white focus:border-primary focus:ring-primary/20">
-                      <SelectValue placeholder="Select guests" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="bg-[#1a1d3d] border-white/10 text-white">
-                    {[1, 2, 3, 4, 5].map(num => (
-                      <SelectItem key={num} value={num.toString()} className="focus:bg-white/10 focus:text-white">
-                        {num}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="attendance"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel className="text-white/80">Will you be attending?</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6"
-                >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="accepts" className="border-primary text-primary" />
-                    </FormControl>
-                    <FormLabel className="font-normal text-white">
-                      Joyfully Accept
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="declines" className="border-white/50 text-white/50" />
-                    </FormControl>
-                    <FormLabel className="font-normal text-white/70">
-                      Regretfully Decline
-                    </FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-white/80">Message for the Couple</FormLabel>
-              <FormControl>
-                <Textarea 
-                  placeholder="Leave your blessings..." 
-                  className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:border-primary focus:ring-primary/20 min-h-[100px]"
-                  {...field} 
-                  value={field.value || ""}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button 
-          type="submit" 
-          disabled={mutation.isPending}
-          className="w-full bg-gradient-to-r from-primary to-[#f4a460] hover:brightness-110 text-black font-bold py-6 text-lg rounded-xl shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:shadow-[0_0_30px_rgba(212,175,55,0.6)] transition-all duration-300"
-        >
-          {mutation.isPending ? (
-            <span className="flex items-center">
-              <Sparkles className="mr-2 animate-spin" /> Sending...
-            </span>
-          ) : (
-            "Send RSVP"
-          )}
-        </Button>
-      </form>
-    </Form>
-  );
-}
