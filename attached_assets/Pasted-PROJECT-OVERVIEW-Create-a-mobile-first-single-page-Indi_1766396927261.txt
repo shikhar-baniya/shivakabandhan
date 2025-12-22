@@ -1,0 +1,590 @@
+PROJECT OVERVIEW
+Create a mobile-first, single-page Indian wedding invitation website with a Shiva-Parvati deity theme. The site should feature immersive scroll-triggered animations, parallax effects (optimized for mobile), and modern UI trends including glassmorphism and mandala patterns. The entire experience should unfold as one continuous scroll journey, similar to Apple's product pages.
+
+DESIGN PHILOSOPHY & THEME
+Core Theme: Shiva-Parvati Divine Union
+
+Primary Imagery: Mount Kailash (Himalayan mountains), sacred rivers, crescent moon, trident (trishul), damaru (drum), lotus flowers, Rudraksha beads
+Color Palette:
+
+Deep blues (midnight blue #1a1d3d, royal blue #2c5f8d)
+Icy whites and silvers (#f0f8ff, #c0d4e8)
+Sacred saffron/gold accents (#f4a460, #d4af37)
+Earthy greens for nature elements (#2d5f3e, #4a7856)
+Pure white for purity (#ffffff)
+
+
+Typography:
+
+Primary: Modern sans-serif (like Poppins or Inter) for readability on mobile
+Accent: Elegant serif or devanagari-inspired font for Sanskrit mantras
+Ensure minimum 16px on mobile, 18px+ for body text
+
+
+
+Visual Style:
+
+Modern glassmorphism UI elements floating over traditional mandala backgrounds
+Subtle neumorphic depth for interactive elements
+Hand-drawn mandala patterns with animated reveals
+Minimalist yet spiritual aesthetic
+Frosted glass cards with blur effects for content sections
+
+
+MOBILE-FIRST ARCHITECTURE
+Responsive Breakpoints:
+
+Mobile: 320px - 767px (primary design target)
+Tablet: 768px - 1024px
+Desktop: 1025px+
+
+Mobile Optimization Requirements:
+
+Touch-friendly targets (minimum 44x44px for buttons)
+Simplified parallax effects for mobile (subtle, performance-optimized)
+Lazy loading for all images
+Maximum 3-second load time on 3G networks
+Reduce parallax speed/complexity on mobile to prevent motion sickness
+Use CSS transforms and GPU acceleration for smooth animations
+Implement intersection observer API for scroll-triggered animations
+
+
+SCROLL-DRIVEN SECTIONS & ANIMATIONS
+SECTION 1: HERO / LANDING
+Visual:
+
+Full-screen mountain landscape (Mount Kailash) with animated clouds drifting
+Silhouettes of Shiva and Parvati in meditation pose, slightly separated on mountains
+Animated stars twinkling in night sky
+Glowing crescent moon in parallax (moves slower than foreground)
+
+Scroll Behavior:
+
+As user scrolls, Shiva and Parvati silhouettes gradually move closer together
+Mountains parallax at different speeds (3-layer depth)
+Clouds drift horizontally while scrolling vertically
+Stars fade and moon brightens
+
+UI Elements:
+
+Glassmorphic card in center with couple names and "Om Namah Shivaya" mantra
+Frosted glass effect with subtle blur
+Animated mandala pattern rotating slowly behind text
+Scroll indicator (animated arrow or "swipe up" text)
+
+
+SECTION 2: DIVINE INTRODUCTION
+Visual:
+
+Animated mandala that expands from center as section enters viewport
+Illustrations/symbols of Shiva (trishul, damaru) and Parvati (lotus, jewelry)
+Flowing sacred Ganga river animation in background
+
+Scroll Behavior:
+
+Mandala starts small, expands to full width as user scrolls into section
+Individual mandala petals appear with stagger animation
+Symbols float in from sides with parallax effect
+Water particles rise with scroll progress
+
+Content:
+
+Brief spiritual story of Shiva-Parvati union
+Quote: "Two souls, one divine love story"
+Glassmorphic text cards that fade in sequentially
+
+Animation Details:
+
+Mandala line drawing animation (SVG stroke animation)
+Symbol icons with hover glow effects
+Text reveals with typewriter or fade-up animation
+
+
+SECTION 3: WEDDING DETAILS
+Visual:
+
+3D-style event cards with glassmorphism
+Each event (Mehendi, Sangeet, Wedding, Reception) as separate floating cards
+Background: Subtle animated rangoli patterns
+
+Scroll Behavior:
+
+Cards slide in from alternating sides as user scrolls
+Each card rotates slightly in 3D space with scroll depth
+Parallax background rangoli moves slower than cards
+Cards stack and unstick sequentially
+
+Card Design:
+
+Frosted glass with soft shadows
+Event name, date, time, venue
+Small animated icon for each event (henna hand, music notes, wedding bells, celebration)
+Thin golden border that glows on hover/tap
+
+Interactive Elements:
+
+Tap card to expand with more details (modal or accordion)
+Add to calendar button (iOS/Google Calendar integration)
+Venue map integration (embedded Google Maps or link)
+
+
+SECTION 4: SACRED STORY / TIMELINE
+Visual:
+
+Vertical timeline with Himalayan mountain silhouette in background
+Timeline nodes as glowing bindis (forehead dots)
+
+Scroll Behavior:
+
+Mountain layers parallax at different speeds
+Timeline path draws/reveals as user scrolls
+Each milestone node glows and scales when it reaches center viewport
+Connecting line between nodes animates with scroll progress
+
+Content:
+
+Couple's love story milestones
+Engagement photos/moments
+Sacred quotes or mantras at each milestone
+
+Animation:
+
+Photo reveals with mask/clip-path animations
+Text fades in with slight scale effect
+Connecting line uses SVG path animation
+
+
+SECTION 5: PHOTO GALLERY / MEMORIES
+Visual:
+
+Masonry grid layout (Pinterest-style)
+Photos with rounded corners and subtle shadows
+Mandala corner decorations on each photo
+
+Scroll Behavior:
+
+Images fade in with stagger as they enter viewport
+Slight zoom effect on scroll (scale transform)
+Background gradient shifts colors subtly with scroll position
+
+Interactive:
+
+Tap/click to open lightbox gallery
+Swipe navigation between photos
+Pinch to zoom on mobile
+Share button for each photo
+
+
+SECTION 6: RSVP / BLESSING FORM
+Visual:
+
+Large glassmorphic form card floating over animated mandala
+Background: Gentle particle system (floating flower petals or light orbs)
+
+Scroll Behavior:
+
+Form elements fade in sequentially as section enters view
+Mandala in background rotates continuously but slowly
+Particles drift upward with slight parallax
+
+Form Fields:
+
+Name (text input)
+Email (email input)
+Phone (tel input)
+Attendance status (radio buttons: Joyfully Accepts / Regretfully Declines)
+Number of guests (number input)
+Dietary preferences (checkboxes)
+Blessing/Message (textarea)
+
+Form Design:
+
+Input fields with glassmorphism (transparent with blur)
+Floating labels
+Smooth focus states with glow effects
+Submit button with hover/tap animation (scale + glow)
+Success animation: Exploding mandala particles and "Blessings Received" message
+
+
+SECTION 7: TRAVEL & ACCOMMODATION
+Visual:
+
+Split-screen layout (map on one side, details on other)
+Animated route lines on map
+Hotel/venue illustrations
+
+Scroll Behavior:
+
+Map zooms in as section enters viewport
+Route line draws from airport to venue
+Hotel cards slide in from bottom
+
+Content:
+
+Venue address with clickable map link
+Nearby hotel recommendations (glassmorphic cards)
+Transportation details
+Parking information
+Contact number for assistance
+
+
+SECTION 8: DRESS CODE & TRADITIONS
+Visual:
+
+Illustrated clothing recommendations
+Color palette swatches
+Traditional jewelry illustrations
+
+Scroll Behavior:
+
+Clothing illustrations fade in with rotation
+Color swatches appear with bounce animation
+Background: Subtle fabric texture with parallax
+
+Content:
+
+Dress code for each event
+Traditional attire suggestions
+Color recommendations
+Cultural notes (brief explanation of rituals)
+
+
+SECTION 9: FOOTER / BLESSINGS
+Visual:
+
+Full-width section with dark gradient background
+Animated constellation pattern (connecting dots)
+Final blessing quote in center
+
+Scroll Behavior:
+
+Constellation lines draw as user scrolls into view
+Stars pulse gently
+Quote fades in with scale animation
+
+Content:
+
+Final Sanskrit blessing: "सदा सुहागन रहो" (Stay forever married/blessed)
+"With love and blessings" from couple names
+Social media handles (if applicable)
+Contact information
+Copyright/credits
+
+Animation:
+
+Slow zoom out effect on background
+Twinkling stars
+Subtle floating animation on all elements
+
+
+PARALLAX EFFECT SPECIFICATIONS
+Mobile-Optimized Parallax:
+
+Reduced Parallax Speed:
+
+Desktop: Background moves at 0.5x scroll speed
+Mobile: Background moves at 0.8x scroll speed (more subtle)
+
+
+Layer System:
+
+Background layer (slowest): Mountains, sky
+Middle layer (medium speed): Clouds, water
+Foreground layer (normal speed): Content, UI elements
+
+
+Implementation:
+
+Use CSS transform: translateY() instead of background-position for better mobile performance
+Apply will-change: transform on parallax elements
+Use requestAnimationFrame for scroll calculations
+Implement debouncing on scroll events
+
+
+Mobile-Specific Adjustments:
+
+Disable heavy parallax effects on devices with reduced motion preference
+Simplify to 2 layers maximum on small screens
+Use CSS-only parallax where possible (transform3d)
+
+
+
+Parallax Examples:
+
+Hero mountain layers move at 0.5x, 0.7x, 1x speeds
+Floating mandala patterns drift at 0.3x speed
+Cloud elements move horizontally while page scrolls vertically
+Water reflections shift with slight delay
+
+
+ANIMATION LIBRARY & EFFECTS
+Scroll-Triggered Animations (use Intersection Observer):
+
+Fade In Up: Elements slide up 30px while fading in
+Scale In: Elements start at 0.8 scale, grow to 1.0
+Stagger: Sequential animations with 100ms delay between items
+Draw In: SVG path stroke animations (for mandalas, timelines)
+Blur to Focus: Elements start blurred, sharpen as they enter viewport
+
+Continuous Animations:
+
+Mandala Rotation: Slow 60-second rotation
+Particle Float: Gentle upward drift of light particles
+Star Twinkle: Random opacity changes for star elements
+Water Ripple: Subtle wave effect on water backgrounds
+Glow Pulse: Soft breathing animation on sacred symbols
+
+Interaction Animations:
+
+Button Hover/Tap: Scale 1.05 + glow effect
+Card Hover: Lift (translateY -10px) + shadow increase
+Form Focus: Input field glow + label float
+Gallery Zoom: Smooth scale transform on tap
+
+
+GLASSMORPHISM IMPLEMENTATION
+CSS Properties for Glass Effect:
+css.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+Application Areas:
+
+Hero introduction card
+Event detail cards
+RSVP form container
+Navigation menu (if sticky)
+Photo gallery overlays
+
+Accessibility Considerations:
+
+Ensure text contrast ratio of 4.5:1 minimum on glass backgrounds
+Add semi-opaque color layer if transparency reduces readability
+Test on both light and dark background contexts
+
+
+MANDALA DESIGN ELEMENTS
+Mandala Types:
+
+Geometric: Perfect circles, sacred geometry patterns
+Floral: Lotus petals, jasmine flowers
+Om Symbol: Stylized Om integrated into mandala center
+Cosmic: Sun/moon/stars integrated design
+
+Animation Techniques:
+
+Line Drawing: SVG stroke-dasharray animation
+Petal Reveal: Sequential appearance of mandala segments
+Rotation: Continuous slow spin (60-120 seconds)
+Color Shift: Gradual hue rotation in background mandalas
+Particle Burst: Mandala fragments on form submission success
+
+Placement:
+
+Hero background (large, subtle)
+Section dividers (small, animated reveals)
+Behind glassmorphic cards (medium, slowly rotating)
+Corner decorations (tiny, static)
+Loading animation (medium, spinning)
+
+
+TECHNICAL SPECIFICATIONS
+Technology Stack:
+
+HTML5: Semantic markup, accessibility attributes
+CSS3: Custom properties, flexbox, grid, animations
+JavaScript: Vanilla JS or lightweight library (GSAP recommended for complex animations)
+Optional Libraries:
+
+GSAP ScrollTrigger (for advanced scroll animations)
+Lenis (for smooth scrolling)
+AOS (Animate On Scroll - lightweight alternative)
+
+
+
+Performance Requirements:
+
+Lighthouse Performance Score: 90+
+First Contentful Paint: < 1.5s
+Largest Contentful Paint: < 2.5s
+Cumulative Layout Shift: < 0.1
+Time to Interactive: < 3s on 3G
+
+Optimization Techniques:
+
+Lazy load all images except hero
+Use WebP with JPEG fallback
+Minify CSS/JS
+Implement critical CSS inline
+Use system fonts where possible
+Compress images (max 200KB per image)
+Use SVG for icons and mandalas
+Implement service worker for offline capability (optional)
+
+Accessibility (WCAG 2.1 AA):
+
+Proper heading hierarchy (h1-h6)
+Alt text for all images
+ARIA labels for interactive elements
+Keyboard navigation support
+Focus indicators visible
+Color contrast ratios met
+Reduced motion media query support
+Screen reader tested
+
+Browser Support:
+
+Chrome (last 2 versions)
+Safari (iOS 13+, macOS 10.15+)
+Firefox (last 2 versions)
+Edge (last 2 versions)
+Samsung Internet (last version)
+
+
+CONTENT STRUCTURE
+Text Content Guidelines:
+
+Keep paragraphs short (2-3 sentences max on mobile)
+Use bullet points for lists
+Highlight key information (dates, times, venues)
+Include phonetic pronunciation guides for Sanskrit names/mantras
+Provide English translations for all Sanskrit text
+
+Multilingual Support (Optional):
+
+Toggle between English and Hindi/Sanskrit
+Store language preference in localStorage
+Smooth transition between languages (fade animation)
+
+
+SPECIAL FEATURES
+Audio Element (Optional):
+
+Background mantra chanting (very soft, toggleable)
+Play/pause button in corner
+Auto-pause on mobile to save data
+Use sacred Om chanting or instrumental flute music
+
+Countdown Timer:
+
+Glassmorphic card showing days/hours/minutes until wedding
+Place near hero section or sticky in corner
+Animate numbers when they change
+
+Share Functionality:
+
+Native Web Share API for mobile
+Generate social media preview card (Open Graph meta tags)
+Shareable QR code that links to website
+
+Save the Date Calendar:
+
+Generate .ics file for download
+Add to Google Calendar button
+Add to Apple Calendar button
+
+Guest Book / Blessings Wall:
+
+Display submitted blessings in a grid
+Moderate submissions before display
+Animated appearance of new blessings
+
+
+MICRO-INTERACTIONS
+
+Scroll Progress Indicator: Thin line at top showing scroll percentage
+Section Active State: Subtle glow or highlight on current section
+Button Ripple Effect: Material design ripple on tap
+Form Validation: Instant inline validation with helpful messages
+Loading States: Skeleton screens or mandala spinner
+Success Feedback: Confetti or particle burst animation
+Tooltip Hover: Additional info on hover (desktop) or tap-hold (mobile)
+
+
+DEVELOPER HANDOFF NOTES
+Assets Needed:
+
+High-res Himalayan mountain photos (min 3 for parallax layers)
+Shiva-Parvati illustrations or silhouettes (SVG preferred)
+Couple photos (engagement, candid shots)
+Event venue photos
+Mandala SVG files (at least 5 different designs)
+Icon set (calendar, location, phone, email, etc.)
+Logo/monogram of couple initials
+
+Brand Guidelines:
+
+Specific Pantone colors (convert to hex)
+Font files (include web font licenses)
+Spacing system (8px base grid recommended)
+Border radius standards (8px, 16px, 24px suggested)
+
+Content Management:
+
+All text content in separate JSON or Markdown files
+Easy to update dates, venues, phone numbers
+Comment code thoroughly for future edits
+
+Testing Checklist:
+
+Test on actual mobile devices (iOS and Android)
+Test on different browsers
+Test with slow 3G connection
+Test with reduced motion enabled
+Test with screen readers
+Test all form submissions
+Test all links and navigation
+Cross-browser parallax testing
+
+
+INSPIRATION REFERENCES
+Design Inspiration:
+
+Apple product pages (for scroll animations)
+Airbnb Experiences (for card-based layouts)
+Stripe Marketing pages (for subtle animations)
+Chanel website (for mobile parallax)
+Indian wedding websites on WeddingWire, WeddingSutra
+
+Animation References:
+
+GSAP ScrollTrigger demos
+Awwwards winning parallax sites
+Codrops interactive demos
+CodePen glassmorphism examples
+
+
+ACCESSIBILITY & MOTION SENSITIVITY
+Reduced Motion Support:
+css@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* Disable parallax */
+  [data-parallax] {
+    transform: none !important;
+  }
+}
+Alternative Experience:
+
+Provide static fallback for users with vestibular disorders
+Add "Reduce animations" toggle button
+Respect system preferences automatically
+
+
+FINAL DELIVERABLES
+
+Fully responsive HTML/CSS/JS files
+Optimized image assets (WebP + fallbacks)
+SVG mandala files
+Documentation for content updates
+Performance audit report
+Accessibility audit report
+Cross-browser testing results
+Deployment instructions
