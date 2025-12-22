@@ -83,8 +83,9 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)"],
-        serif: ["var(--font-serif)"],
+        serif: ["'Cinzel'", "serif"],
+        sans: ["'Lato'", "sans-serif"],
+        script: ["'Great Vibes'", "cursive"],
         mono: ["var(--font-mono)"],
       },
       keyframes: {
