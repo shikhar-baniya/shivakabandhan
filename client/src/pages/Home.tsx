@@ -23,19 +23,19 @@ export default function Home() {
       {/* 1. HERO SECTION */}
       <section id="home" className="h-screen w-full relative flex items-center justify-center overflow-hidden">
         {/* Background - Himalaya/Mountain feel with proper parallax */}
-        <motion.div 
-          style={{ y: useTransform(scrollY, [0, 1000], [0, 300]) }} 
-          className="absolute inset-0 z-0 w-full h-full"
-        >
-          <img 
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&q=80&w=2500" 
-            alt="Majestic Mountains" 
-            className="w-full h-full object-cover"
-            onLoad={(e) => (e.currentTarget.style.opacity = "1")}
-            style={{ opacity: 0, transition: "opacity 0.5s ease-in-out" }}
-          />
+        <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
+          <motion.div 
+            style={{ y: useTransform(scrollY, [0, 800], [0, 400]) }} 
+            className="w-full h-[120%]"
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&q=80&w=2500" 
+              alt="Majestic Mountains" 
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a1d3d]/50 to-[#1a1d3d] z-10" />
-        </motion.div>
+        </div>
 
         {/* Floating Particles/Stars */}
         <div className="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 animate-pulse" />

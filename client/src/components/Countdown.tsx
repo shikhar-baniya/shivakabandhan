@@ -15,8 +15,10 @@ export function Countdown() {
     minutes: 0,
     seconds: 0,
   });
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const calculateTimeLeft = () => {
       const targetDate = new Date("2026-02-24").getTime();
       const now = new Date().getTime();
@@ -39,45 +41,41 @@ export function Countdown() {
 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <motion.div
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="flex flex-col items-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0 }}
+      className="flex flex-col items-center min-w-0"
     >
-      <motion.div
-        key={value}
-        initial={{ rotateX: 90, opacity: 0 }}
-        animate={{ rotateX: 0, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        className="glass-card px-4 md:px-6 py-3 md:py-4 rounded-xl border-2 border-primary/30 backdrop-blur-xl"
-      >
-        <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary font-serif tracking-tight">
+      <div className="glass-card px-2 md:px-4 py-2 md:py-3 rounded-lg border-2 border-primary/30 backdrop-blur-xl">
+        <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary font-serif tracking-tight">
           {String(value).padStart(2, "0")}
         </div>
-      </motion.div>
-      <p className="text-xs md:text-sm font-sans uppercase tracking-widest text-white/60 mt-3">
+      </div>
+      <p className="text-xs md:text-xs font-sans uppercase tracking-widest text-white/60 mt-2">
         {label}
       </p>
     </motion.div>
   );
+
+  if (!mounted) return null;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="flex flex-col items-center gap-8 md:gap-12"
+      className="flex flex-col items-center gap-6 md:gap-10"
     >
-      <div>
-        <h3 className="text-2xl md:text-3xl font-script text-primary mb-2">
+      <div className="text-center">
+        <h3 className="text-xl md:text-2xl font-script text-primary mb-1">
           Counting Down to Our Big Day
         </h3>
-        <p className="text-white/60 text-sm md:text-base">
+        <p className="text-white/60 text-xs md:text-sm">
           24th February 2026
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+      <div className="flex gap-2 md:gap-4 justify-center flex-wrap">
         <TimeUnit value={timeLeft.days} label="Days" />
         <TimeUnit value={timeLeft.hours} label="Hours" />
         <TimeUnit value={timeLeft.minutes} label="Minutes" />
@@ -93,7 +91,7 @@ export function Countdown() {
           ],
         }}
         transition={{ duration: 3, repeat: Infinity }}
-        className="h-1 w-32 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"
+        className="h-1 w-24 md:w-32 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"
       />
     </motion.div>
   );
