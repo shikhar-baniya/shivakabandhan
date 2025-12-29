@@ -235,39 +235,110 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. HORIZONTAL SCROLLING GALLERY */}
-      <section id="gallery-scroll" className="py-20 px-4 relative overflow-hidden bg-black/40">
+      {/* 5. ATTIRE THEME */}
+      <section id="theme" className="py-20 px-4 relative overflow-hidden bg-black/40">
         <div className="max-w-full mx-auto relative z-10 mb-12">
-          <SectionHeading title="Our Journey Together" subtitle="Scroll through our most cherished moments" />
+          <SectionHeading title="Dress Code Theme" subtitle="Be part of our coordinated celebration with these beautiful color themes" />
         </div>
         
-        <div className="overflow-x-auto pb-8 px-4 md:px-0">
-          <div className="flex gap-6 md:gap-8 w-max">
-            <EventSlide 
-              title="First Meeting"
-              description="Where it all began - a chance encounter that changed everything."
-              image="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600&h=400"
-              delay={0}
-            />
-            <EventSlide 
-              title="Our Adventure"
-              description="Exploring new horizons together, hand in hand through life's journey."
-              image="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600&h=400"
-              delay={0.1}
-            />
-            <EventSlide 
-              title="The Proposal"
-              description="The moment when two souls became one eternal promise."
-              image="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600&h=400"
-              delay={0.2}
-            />
-            <EventSlide 
-              title="Getting Ready"
-              description="The anticipation, the joy, the love evident in every moment."
-              image="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=600&h=400"
-              delay={0.3}
-            />
-          </div>
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+          {/* Mehandi */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="glass-panel p-6 rounded-2xl"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-600 to-green-400 flex items-center justify-center">
+                <span className="text-xl">🌿</span>
+              </div>
+              <h3 className="text-2xl font-serif text-white">Mehandi</h3>
+            </div>
+            <div className="space-y-2">
+              <p className="text-white/80"><span className="text-primary">💃 Others:</span> Shades of green</p>
+              <p className="text-xs text-white/50 mt-4 italic">Celebrate with lush green hues!</p>
+            </div>
+          </motion.div>
+
+          {/* Haldi */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="glass-panel p-6 rounded-2xl"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-300 flex items-center justify-center">
+                <span className="text-xl">🌼</span>
+              </div>
+              <h3 className="text-2xl font-serif text-white">Haldi</h3>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <p className="text-white/80"><span className="text-primary">💐 Bridesmaids:</span> Pastel peach-pink</p>
+                <p className="text-white/80"><span className="text-primary">👨‍👩‍👧‍👦 Family:</span> Pastel peach-pink & yellow combo</p>
+                <p className="text-white/80"><span className="text-primary">🌞 Others:</span> Shades of sunshine yellow</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Sangeet */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="glass-panel p-6 rounded-2xl"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-pink-400 flex items-center justify-center">
+                <span className="text-xl">💫</span>
+              </div>
+              <h3 className="text-2xl font-serif text-white">Sangeet</h3>
+            </div>
+            <div className="space-y-2">
+              <p className="text-white/80"><span className="text-primary">✨ Others:</span> Shimmery / glittery Indo-western outfits</p>
+              <p className="text-xs text-white/50 mt-4 italic">Let your outfit sparkle!</p>
+            </div>
+          </motion.div>
+
+          {/* Reception / Jaimal */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="glass-panel p-6 rounded-2xl"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-200 to-orange-200 flex items-center justify-center">
+                <span className="text-xl">❤️</span>
+              </div>
+              <h3 className="text-2xl font-serif text-white">Reception / Jaimal</h3>
+            </div>
+            <div className="space-y-2">
+              <p className="text-white/80"><span className="text-primary">💃 Bridesmaids & Family:</span> Beige-offwhite mix</p>
+              <p className="text-white/80"><span className="text-primary">🌸 Others:</span> Ethnic wear in pastel shades</p>
+            </div>
+          </motion.div>
+
+          {/* Fere (Wedding Ceremony) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="glass-panel p-6 rounded-2xl lg:col-span-2 md:col-span-1"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-600 to-pink-500 flex items-center justify-center">
+                <span className="text-xl">🪔</span>
+              </div>
+              <h3 className="text-2xl font-serif text-white">Fere (Wedding Ceremony)</h3>
+            </div>
+            <div className="space-y-2">
+              <p className="text-white/80"><span className="text-primary">👗 Everyone:</span> Pure traditional attire</p>
+              <p className="text-white/80"><span className="text-primary">💫 Add-ons:</span> Maharashtrian Nath for ladies</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -420,7 +491,7 @@ function FloatingMenu() {
     { label: "Home", id: "home" },
     { label: "Story", id: "story" },
     { label: "Events", id: "events" },
-    { label: "Journey", id: "gallery-scroll" },
+    { label: "Dress Code", id: "theme" },
     { label: "RSVP", id: "rsvp" }
   ];
 
