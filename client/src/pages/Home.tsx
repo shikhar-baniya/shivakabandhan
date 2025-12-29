@@ -40,7 +40,7 @@ export default function Home() {
         {/* Floating Particles/Stars */}
         <div className="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 animate-pulse" />
 
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center pb-32">
           <motion.div 
             style={{ y: y2, opacity }}
             className="mb-6 font-script text-3xl md:text-5xl text-primary/80"
@@ -69,7 +69,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 1 }}
-            className="mt-16 relative z-20"
+            className="mt-10 md:mt-16 relative z-20"
           >
             <Countdown />
           </motion.div>
