@@ -12,9 +12,24 @@ export default function Home() {
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-  
-  // Hero Background Parallax
-  const heroScale = useTransform(scrollY, [0, 1000], [1, 1.2]);
+  const [selectedRsvpOption, setSelectedRsvpOption] = useState("attending");
+
+  const rsvpOptions = [
+    { id: "attending", text: "I'll definitely be celebrating with you!" },
+    { id: "booking", text: "Already booking my travel!" },
+    { id: "wishes", text: "Can't make it, but sending all my love and blessings!" }
+  ];
+
+  const getRsvpMessage = () => {
+    const option = rsvpOptions.find(opt => opt.id === selectedRsvpOption);
+    return option ? option.text : rsvpOptions[0].text;
+  };
+
+  const getWhatsAppLink = () => {
+    const message = `Hello Shikha and Varun! ${getRsvpMessage()}`;
+    const encodedMessage = encodeURIComponent(message);
+    return `https://wa.me/919876543210?text=${encodedMessage}`;
+  };
 
   return (
     <div className="min-h-screen w-full relative">
@@ -55,13 +70,13 @@ export default function Home() {
             className="glass-panel p-8 md:p-12 rounded-full aspect-square md:aspect-auto md:rounded-3xl border-2 border-primary/20 flex flex-col items-center justify-center backdrop-blur-xl shadow-[0_0_50px_rgba(212,175,55,0.2)]"
           >
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-4 tracking-tighter">
-              Aarav <span className="text-primary text-4xl md:text-6xl align-middle mx-2">&</span> Diya
+              Shikha <span className="text-primary text-4xl md:text-6xl align-middle mx-2">&</span> Varun
             </h1>
             <div className="h-px w-32 bg-primary/60 my-6" />
             <p className="text-xl md:text-2xl font-sans tracking-widest text-white/90 uppercase">
               24th February, 2026
             </p>
-            <p className="mt-2 text-white/60 font-serif italic">Udaipur, Rajasthan</p>
+            <p className="mt-2 text-white/60 font-serif italic">Prime Park, Amravati</p>
           </motion.div>
 
           {/* Countdown Timer */}
@@ -142,7 +157,7 @@ export default function Home() {
               </p>
               <div className="pt-6">
                 <p className="font-script text-3xl text-primary">With Love,</p>
-                <p className="font-serif text-xl text-white mt-2">Aarav & Diya</p>
+                <p className="font-serif text-xl text-white mt-2">Shikha & Varun</p>
               </div>
             </motion.div>
           </div>
@@ -268,11 +283,31 @@ export default function Home() {
             className="glass-panel p-10 md:p-16 rounded-2xl flex flex-col items-center gap-8"
           >
             <p className="text-lg text-white/80 max-w-md">
-              We'd love to hear from you! Share your joy with us on WhatsApp and let us know if you'll be celebrating with us.
+              We'd love to hear from you! Select your response and share your joy with us on WhatsApp.
             </p>
             
+            <div className="w-full space-y-4">
+              {rsvpOptions.map((option) => (
+                <motion.label
+                  key={option.id}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center gap-3 p-4 rounded-lg border-2 border-primary/20 cursor-pointer hover:bg-white/5 transition-colors"
+                >
+                  <input
+                    type="radio"
+                    name="rsvp"
+                    value={option.id}
+                    checked={selectedRsvpOption === option.id}
+                    onChange={(e) => setSelectedRsvpOption(e.target.value)}
+                    className="w-4 h-4 accent-primary cursor-pointer"
+                  />
+                  <span className="text-white/80 text-sm md:text-base">{option.text}</span>
+                </motion.label>
+              ))}
+            </div>
+            
             <motion.a
-              href="https://wa.me/919876543210?text=Hello%20Aarav%20and%20Diya!%20I'm%20excited%20for%20your%20wedding%20on%20Feb%2024,%202026!"
+              href={getWhatsAppLink()}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(212, 175, 55, 0.6)" }}
@@ -309,7 +344,7 @@ export default function Home() {
           </div>
           
           <p className="text-xs text-white/30 uppercase tracking-widest">
-            © 2025 Aarav & Diya Wedding. With Love.
+            © 2026 Shikha & Varun Wedding. With Love.
           </p>
         </div>
       </footer>
