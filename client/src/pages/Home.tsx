@@ -5,7 +5,7 @@ import { EventCard } from "@/components/EventCard";
 import { Countdown } from "@/components/Countdown";
 import { EventSlide } from "@/components/EventSlide";
 import { Button } from "@/components/ui/button";
-import { MapPin, Heart, Music, Phone, Mail, Globe, MessageCircle } from "lucide-react";
+import { MapPin, Heart, Music, Phone, Mail, Globe, MessageCircle, Menu, X } from "lucide-react";
 
 export default function Home() {
   const { scrollY } = useScroll();
@@ -34,6 +34,7 @@ export default function Home() {
   return (
     <div className="min-h-screen w-full relative">
       <NavBar />
+      <FloatingMenu />
       
       {/* 1. HERO SECTION */}
       <section id="home" className="h-screen w-full relative flex items-center justify-center overflow-hidden">
@@ -409,6 +410,71 @@ function SocialIcon({ icon, href }: { icon: React.ReactNode; href: string }) {
     >
       {icon}
     </a>
+  );
+}
+
+function FloatingMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const menuItems = [
+    { label: "Home", id: "home" },
+    { label: "Story", id: "story" },
+    { label: "Events", id: "events" },
+    { label: "Journey", id: "gallery-scroll" },
+    { label: "RSVP", id: "rsvp" }
+  ];
+
+  const handleNavigation = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setIsOpen(false);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.5 }}
+      className="fixed bottom-8 left-8 z-40"
+    >
+      <AnimatePresence mode="wait">
+        {isOpen && (
+          <motion.div
+            key="menu"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            className="mb-4 flex flex-col gap-2"
+          >
+            {menuItems.map((item, index) => (
+              <motion.button
+                key={item.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                onClick={() => handleNavigation(item.id)}
+                className="px-4 py-2 rounded-full glass-panel text-sm font-serif text-white/90 hover:text-primary transition-colors whitespace-nowrap"
+              >
+                {item.label}
+              </motion.button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-14 h-14 rounded-full glass-panel flex items-center justify-center backdrop-blur-lg border-2 border-primary/40 hover:border-primary/80 transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+      >
+        {isOpen ? (
+          <X size={24} className="text-primary" />
+        ) : (
+          <Menu size={24} className="text-primary" />
+        )}
+      </motion.button>
+    </motion.div>
   );
 }
 
