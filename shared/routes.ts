@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertRsvpSchema, rsvps } from './schema';
+import { insertRsvpSchema, type Rsvp } from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -18,7 +18,7 @@ export const api = {
       path: '/api/rsvps',
       input: insertRsvpSchema,
       responses: {
-        201: z.custom<typeof rsvps.$inferSelect>(),
+        201: z.custom<Rsvp>(),
         400: errorSchemas.validation,
       },
     },
