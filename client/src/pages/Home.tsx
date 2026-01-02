@@ -5,7 +5,7 @@ import { EventCard } from "@/components/EventCard";
 import { Countdown } from "@/components/Countdown";
 import { EventSlide } from "@/components/EventSlide";
 import { Button } from "@/components/ui/button";
-import { MapPin, Heart, Music, Phone, Mail, Globe, MessageCircle, Menu, X } from "lucide-react";
+import { MapPin, Heart, Music, Phone, Mail, Globe, MessageCircle, Menu, X, Volume2, VolumeX } from "lucide-react";
 
 export default function Home() {
   const { scrollY } = useScroll();
@@ -13,6 +13,91 @@ export default function Home() {
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const [selectedRsvpOption, setSelectedRsvpOption] = useState("attending");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Initialize audio with better error handling and format support
+    const audioElement = new Audio();
+    
+    // Set up the audio source
+    audioElement.src = "/sitar-music.m4a";
+    audioElement.loop = true;
+    audioElement.volume = 0.2;
+    audioElement.preload = "none"; // Don't preload to avoid immediate errors
+    
+    // Add comprehensive error handling
+    audioElement.addEventListener('error', (e) => {
+      console.error('Audio error:', e);
+      console.error('Audio error details:', audioElement.error);
+      
+      // Try to provide user feedback
+      if (audioElement.error) {
+        switch(audioElement.error.code) {
+          case audioElement.error.MEDIA_ERR_ABORTED:
+            console.log('Audio playback was aborted');
+            break;
+          case audioElement.error.MEDIA_ERR_NETWORK:
+            console.log('Network error occurred while loading audio');
+            break;
+          case audioElement.error.MEDIA_ERR_DECODE:
+            console.log('Audio decoding error');
+            break;
+          case audioElement.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+            console.log('Audio format not supported');
+            break;
+        }
+      }
+    });
+    
+    audioElement.addEventListener('canplaythrough', () => {
+      console.log('Audio loaded and ready to play');
+    });
+    
+    audioElement.addEventListener('loadstart', () => {
+      console.log('Audio loading started');
+    });
+    
+    setAudio(audioElement);
+
+    return () => {
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.removeEventListener('error', () => {});
+        audioElement.removeEventListener('canplaythrough', () => {});
+        audioElement.removeEventListener('loadstart', () => {});
+        audioElement.src = "";
+      }
+    };
+  }, []);
+
+  const toggleMusic = async () => {
+    if (audio) {
+      try {
+        if (isPlaying) {
+          audio.pause();
+          setIsPlaying(false);
+        } else {
+          // Load the audio if not already loaded
+          if (audio.readyState === 0) {
+            audio.load();
+            // Wait a bit for loading
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
+          
+          // Modern browsers require user interaction before playing audio
+          await audio.play();
+          setIsPlaying(true);
+        }
+      } catch (error) {
+        console.error('Error playing audio:', error);
+        setIsPlaying(false);
+        
+        // Show user-friendly error
+        alert('Unable to play background music. This might be due to browser restrictions or audio format compatibility.');
+      }
+    }
+  };
 
   const rsvpOptions = [
     { id: "attending", text: "I'll definitely be celebrating with you!" },
@@ -35,6 +120,7 @@ export default function Home() {
     <div className="min-h-screen w-full relative">
       <NavBar />
       <FloatingMenu />
+      <FloatingMusicPlayer isPlaying={isPlaying} onToggle={toggleMusic} />
       
       {/* 1. HERO SECTION */}
       <section id="home" className="h-screen w-full relative flex items-center justify-center overflow-hidden">
@@ -57,11 +143,18 @@ export default function Home() {
         <div className="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 animate-pulse" />
 
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center pb-32 pt-20 md:pt-0">
+          <motion.div 
+            style={{ y: y2, opacity }}
+            className="mb-8 font-script text-3xl md:text-5xl text-primary/80"
+          >
+            Om Namah Shivaya
+          </motion.div>
+          
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="glass-panel p-6 md:p-12 rounded-2xl md:rounded-3xl border-2 border-primary/20 flex flex-col items-center justify-center backdrop-blur-xl shadow-[0_0_50px_rgba(212,175,55,0.2)] mb-6"
+            className="glass-panel p-6 md:p-12 rounded-2xl md:rounded-3xl border-2 border-primary/20 flex flex-col items-center justify-center backdrop-blur-xl shadow-[0_0_50px_rgba(212,175,55,0.2)]"
           >
             <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-4 tracking-tighter">
               Shikha <span className="text-primary text-3xl md:text-6xl align-middle mx-2">&</span> Varun
@@ -71,13 +164,6 @@ export default function Home() {
               24th February, 2026
             </p>
             <p className="mt-2 text-white/60 font-serif italic">Prime Park, Amravati</p>
-          </motion.div>
-          
-          <motion.div 
-            style={{ y: y2, opacity }}
-            className="font-script text-2xl md:text-5xl text-primary/80"
-          >
-            Om Namah Shivaya
           </motion.div>
 
           {/* Countdown Timer */}
@@ -110,15 +196,42 @@ export default function Home() {
       <section id="story" className="py-20 md:py-32 px-4 relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div
-            initial={{ rotate: 0 }}
-            whileInView={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-32 -left-32 w-96 h-96 opacity-10 pointer-events-none"
+            initial={{ rotate: 0, scale: 0.5, opacity: 0 }}
+            whileInView={{ rotate: 360, scale: 1, opacity: 0.15 }}
+            transition={{ 
+              rotate: { duration: 30, repeat: Infinity, ease: "linear" },
+              scale: { duration: 2, ease: "easeOut" },
+              opacity: { duration: 2, ease: "easeOut" }
+            }}
+            className="absolute -top-32 -left-32 w-96 h-96 pointer-events-none"
           >
-            {/* Mandala SVG placeholder */}
-            <svg viewBox="0 0 100 100" className="w-full h-full fill-current text-primary">
-              <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="2" fill="none" />
-              <path d="M50 10 L60 40 L90 50 L60 60 L50 90 L40 60 L10 50 L40 40 Z" fill="currentColor" />
+            {/* Enhanced Mandala SVG */}
+            <svg viewBox="0 0 200 200" className="w-full h-full fill-current text-primary">
+              {/* Outer ring */}
+              <circle cx="100" cy="100" r="90" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.6" />
+              <circle cx="100" cy="100" r="75" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.4" />
+              <circle cx="100" cy="100" r="60" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.3" />
+              
+              {/* Petals - outer layer */}
+              {Array.from({ length: 12 }).map((_, i) => (
+                <g key={`outer-${i}`} transform={`rotate(${i * 30} 100 100)`}>
+                  <path d="M100 25 Q110 50 100 75 Q90 50 100 25" fill="currentColor" opacity="0.3" />
+                </g>
+              ))}
+              
+              {/* Petals - middle layer */}
+              {Array.from({ length: 8 }).map((_, i) => (
+                <g key={`middle-${i}`} transform={`rotate(${i * 45 + 22.5} 100 100)`}>
+                  <path d="M100 40 Q105 60 100 80 Q95 60 100 40" fill="currentColor" opacity="0.4" />
+                </g>
+              ))}
+              
+              {/* Inner star */}
+              <path d="M100 50 L105 70 L125 70 L110 82 L115 102 L100 90 L85 102 L90 82 L75 70 L95 70 Z" fill="currentColor" opacity="0.5" />
+              
+              {/* Center circle */}
+              <circle cx="100" cy="100" r="15" fill="currentColor" opacity="0.6" />
+              <circle cx="100" cy="100" r="8" fill="currentColor" opacity="0.8" />
             </svg>
           </motion.div>
           
@@ -549,3 +662,52 @@ function FloatingMenu() {
   );
 }
 
+function FloatingMusicPlayer({ isPlaying, onToggle }: { isPlaying: boolean; onToggle: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1 }}
+      className="fixed bottom-8 right-8 z-40"
+    >
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={onToggle}
+        className="w-14 h-14 rounded-full glass-panel flex items-center justify-center backdrop-blur-lg border-2 border-primary/40 hover:border-primary/80 transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+      >
+        {isPlaying ? (
+          <Volume2 size={24} className="text-primary" />
+        ) : (
+          <VolumeX size={24} className="text-primary" />
+        )}
+      </motion.button>
+      
+      {/* Music waves animation when playing */}
+      {isPlaying && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute -top-2 -right-2 flex gap-1"
+        >
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={i}
+              animate={{
+                height: [4, 12, 4],
+                opacity: [0.4, 1, 0.4]
+              }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                delay: i * 0.2,
+                ease: "easeInOut"
+              }}
+              className="w-1 bg-primary rounded-full"
+            />
+          ))}
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
