@@ -17,115 +17,68 @@ export default function Home() {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [userInteracted, setUserInteracted] = useState(false);
 
-  // Add user interaction listener
+  // Add user interaction listener for immediate audio start
   useEffect(() => {
     const handleUserInteraction = () => {
       setUserInteracted(true);
       if (audio && !isPlaying) {
-        // Try to play audio after user interaction
+        // Start playing audio immediately on first user interaction
         audio.play().then(() => {
-          setIsPlaying(true);
+          console.log('Audio started after user interaction');
         }).catch(console.error);
       }
     };
 
-    // Listen for any user interaction
+    // Listen for any user interaction to start audio
     document.addEventListener('click', handleUserInteraction, { once: true });
     document.addEventListener('touchstart', handleUserInteraction, { once: true });
+    document.addEventListener('scroll', handleUserInteraction, { once: true });
     document.addEventListener('keydown', handleUserInteraction, { once: true });
 
     return () => {
       document.removeEventListener('click', handleUserInteraction);
       document.removeEventListener('touchstart', handleUserInteraction);
+      document.removeEventListener('scroll', handleUserInteraction);
       document.removeEventListener('keydown', handleUserInteraction);
     };
   }, [audio, isPlaying]);
 
   useEffect(() => {
-    // Create audio element using HTML5 approach for better compatibility
-    const audioElement = document.createElement('audio');
-    audioElement.src = "/music.mp3";
-    audioElement.loop = true;
-    audioElement.volume = 0.2;
-    audioElement.preload = "auto";
-    audioElement.crossOrigin = "anonymous";
-    
-    // Add to DOM (hidden) for better browser support
-    audioElement.style.display = 'none';
-    document.body.appendChild(audioElement);
-    
-    // Add comprehensive error handling
-    audioElement.addEventListener('error', (e) => {
-      console.error('Audio error:', e);
-      console.error('Audio error details:', audioElement.error);
-      setIsPlaying(false);
-    });
-    
-    audioElement.addEventListener('canplaythrough', () => {
-      console.log('Audio loaded and ready to play');
-      // Try to auto-play when audio is ready
-      tryAutoPlay();
-    });
-    
-    audioElement.addEventListener('loadstart', () => {
-      console.log('Audio loading started');
-    });
-
-    const tryAutoPlay = async () => {
-      try {
-        await audioElement.play();
-        setIsPlaying(true);
-        console.log('Auto-play started successfully');
-      } catch (error) {
-        console.log('Auto-play prevented by browser policy:', error);
-        // Auto-play failed, user will need to click the button
-        setIsPlaying(false);
-      }
-    };
-    
-    setAudio(audioElement);
-
-    // Try to start auto-play after a short delay
-    const autoPlayTimer = setTimeout(() => {
-      if (audioElement.readyState >= 3) { // HAVE_FUTURE_DATA
-        tryAutoPlay();
-      }
-    }, 2000);
-
-    return () => {
-      clearTimeout(autoPlayTimer);
-      if (audioElement) {
-        audioElement.pause();
-        audioElement.removeEventListener('error', () => {});
-        audioElement.removeEventListener('canplaythrough', () => {});
-        audioElement.removeEventListener('loadstart', () => {});
-        if (audioElement.parentNode) {
-          audioElement.parentNode.removeChild(audioElement);
+    // Set volume when audio is available
+    if (audio) {
+      audio.volume = 0.2;
+      
+      // Try to play immediately
+      const tryPlay = async () => {
+        try {
+          await audio.play();
+          console.log('Audio started successfully');
+        } catch (error) {
+          console.log('Autoplay blocked:', error);
         }
-      }
-    };
-  }, []);
+      };
+      
+      // Multiple attempts to start audio
+      tryPlay();
+      setTimeout(tryPlay, 1000);
+      setTimeout(tryPlay, 2000);
+    }
+  }, [audio]);
 
   const toggleMusic = async () => {
     if (audio) {
       try {
         if (isPlaying) {
+          // Pause the audio
           audio.pause();
-          setIsPlaying(false);
+          console.log('Audio paused');
         } else {
-          // Load the audio if not already loaded
-          if (audio.readyState === 0) {
-            audio.load();
-            // Wait a bit for loading
-            await new Promise(resolve => setTimeout(resolve, 500));
-          }
-          
           // Play the audio
           await audio.play();
-          setIsPlaying(true);
+          console.log('Audio playing');
         }
       } catch (error) {
-        console.error('Error playing audio:', error);
+        console.error('Error toggling audio:', error);
         setIsPlaying(false);
       }
     }
@@ -150,6 +103,30 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full relative">
+      {/* Hidden autoplay audio element */}
+      <audio
+        ref={(el) => {
+          if (el && !audio) {
+            setAudio(el);
+          }
+        }}
+        src="/music.mp3"
+        loop
+        autoPlay
+        muted={false}
+        style={{ display: 'none' }}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onCanPlayThrough={() => {
+          // Try to play when ready
+          if (audio && !isPlaying) {
+            audio.play().catch(() => {
+              console.log('Autoplay blocked, waiting for user interaction');
+            });
+          }
+        }}
+      />
+      
       <NavBar />
       <FloatingMenu />
       <FloatingMusicPlayer isPlaying={isPlaying} onToggle={toggleMusic} />
@@ -706,40 +683,18 @@ function FloatingMusicPlayer({ isPlaying, onToggle }: { isPlaying: boolean; onTo
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={onToggle}
-        className="w-14 h-14 rounded-full glass-panel flex items-center justify-center backdrop-blur-lg border-2 border-primary/40 hover:border-primary/80 transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+        className={`w-14 h-14 rounded-full glass-panel flex items-center justify-center backdrop-blur-lg border-2 transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)] ${
+          isPlaying 
+            ? 'border-primary/80 bg-primary/10' 
+            : 'border-primary/40 hover:border-primary/80'
+        }`}
       >
         {isPlaying ? (
           <Volume2 size={24} className="text-primary" />
         ) : (
-          <VolumeX size={24} className="text-primary" />
+          <VolumeX size={24} className="text-primary/70" />
         )}
       </motion.button>
-      
-      {/* Music waves animation when playing */}
-      {isPlaying && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute -top-2 -right-2 flex gap-1"
-        >
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              animate={{
-                height: [4, 12, 4],
-                opacity: [0.4, 1, 0.4]
-              }}
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: "easeInOut"
-              }}
-              className="w-1 bg-primary rounded-full"
-            />
-          ))}
-        </motion.div>
-      )}
     </motion.div>
   );
 }
