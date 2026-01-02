@@ -56,28 +56,28 @@ export default function Home() {
         {/* Floating Particles/Stars */}
         <div className="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 animate-pulse" />
 
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center pb-32">
-          <motion.div 
-            style={{ y: y2, opacity }}
-            className="mb-6 font-script text-3xl md:text-5xl text-primary/80"
-          >
-            Om Namah Shivaya
-          </motion.div>
-          
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center pb-32 pt-20 md:pt-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="glass-panel p-8 md:p-12 rounded-full aspect-square md:aspect-auto md:rounded-3xl border-2 border-primary/20 flex flex-col items-center justify-center backdrop-blur-xl shadow-[0_0_50px_rgba(212,175,55,0.2)]"
+            className="glass-panel p-6 md:p-12 rounded-2xl md:rounded-3xl border-2 border-primary/20 flex flex-col items-center justify-center backdrop-blur-xl shadow-[0_0_50px_rgba(212,175,55,0.2)] mb-6"
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-4 tracking-tighter">
-              Shikha <span className="text-primary text-4xl md:text-6xl align-middle mx-2">&</span> Varun
+            <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-4 tracking-tighter">
+              Shikha <span className="text-primary text-3xl md:text-6xl align-middle mx-2">&</span> Varun
             </h1>
-            <div className="h-px w-32 bg-primary/60 my-6" />
-            <p className="text-xl md:text-2xl font-sans tracking-widest text-white/90 uppercase">
+            <div className="h-px w-32 bg-primary/60 my-4 md:my-6" />
+            <p className="text-lg md:text-2xl font-sans tracking-widest text-white/90 uppercase">
               24th February, 2026
             </p>
             <p className="mt-2 text-white/60 font-serif italic">Prime Park, Amravati</p>
+          </motion.div>
+          
+          <motion.div 
+            style={{ y: y2, opacity }}
+            className="font-script text-2xl md:text-5xl text-primary/80"
+          >
+            Om Namah Shivaya
           </motion.div>
 
           {/* Countdown Timer */}
