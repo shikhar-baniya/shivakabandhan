@@ -15,58 +15,93 @@ export default function Home() {
   const [selectedRsvpOption, setSelectedRsvpOption] = useState("attending");
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [userInteracted, setUserInteracted] = useState(false);
+
+  // Add user interaction listener
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      setUserInteracted(true);
+      if (audio && !isPlaying) {
+        // Try to play audio after user interaction
+        audio.play().then(() => {
+          setIsPlaying(true);
+        }).catch(console.error);
+      }
+    };
+
+    // Listen for any user interaction
+    document.addEventListener('click', handleUserInteraction, { once: true });
+    document.addEventListener('touchstart', handleUserInteraction, { once: true });
+    document.addEventListener('keydown', handleUserInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('touchstart', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+    };
+  }, [audio, isPlaying]);
 
   useEffect(() => {
-    // Initialize audio with better error handling and format support
-    const audioElement = new Audio();
-    
-    // Set up the audio source
-    audioElement.src = "/sitar-music.m4a";
+    // Create audio element using HTML5 approach for better compatibility
+    const audioElement = document.createElement('audio');
+    audioElement.src = "/music.mp3";
     audioElement.loop = true;
     audioElement.volume = 0.2;
-    audioElement.preload = "none"; // Don't preload to avoid immediate errors
+    audioElement.preload = "auto";
+    audioElement.crossOrigin = "anonymous";
+    
+    // Add to DOM (hidden) for better browser support
+    audioElement.style.display = 'none';
+    document.body.appendChild(audioElement);
     
     // Add comprehensive error handling
     audioElement.addEventListener('error', (e) => {
       console.error('Audio error:', e);
       console.error('Audio error details:', audioElement.error);
-      
-      // Try to provide user feedback
-      if (audioElement.error) {
-        switch(audioElement.error.code) {
-          case audioElement.error.MEDIA_ERR_ABORTED:
-            console.log('Audio playback was aborted');
-            break;
-          case audioElement.error.MEDIA_ERR_NETWORK:
-            console.log('Network error occurred while loading audio');
-            break;
-          case audioElement.error.MEDIA_ERR_DECODE:
-            console.log('Audio decoding error');
-            break;
-          case audioElement.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-            console.log('Audio format not supported');
-            break;
-        }
-      }
+      setIsPlaying(false);
     });
     
     audioElement.addEventListener('canplaythrough', () => {
       console.log('Audio loaded and ready to play');
+      // Try to auto-play when audio is ready
+      tryAutoPlay();
     });
     
     audioElement.addEventListener('loadstart', () => {
       console.log('Audio loading started');
     });
+
+    const tryAutoPlay = async () => {
+      try {
+        await audioElement.play();
+        setIsPlaying(true);
+        console.log('Auto-play started successfully');
+      } catch (error) {
+        console.log('Auto-play prevented by browser policy:', error);
+        // Auto-play failed, user will need to click the button
+        setIsPlaying(false);
+      }
+    };
     
     setAudio(audioElement);
 
+    // Try to start auto-play after a short delay
+    const autoPlayTimer = setTimeout(() => {
+      if (audioElement.readyState >= 3) { // HAVE_FUTURE_DATA
+        tryAutoPlay();
+      }
+    }, 2000);
+
     return () => {
+      clearTimeout(autoPlayTimer);
       if (audioElement) {
         audioElement.pause();
         audioElement.removeEventListener('error', () => {});
         audioElement.removeEventListener('canplaythrough', () => {});
         audioElement.removeEventListener('loadstart', () => {});
-        audioElement.src = "";
+        if (audioElement.parentNode) {
+          audioElement.parentNode.removeChild(audioElement);
+        }
       }
     };
   }, []);
@@ -85,16 +120,13 @@ export default function Home() {
             await new Promise(resolve => setTimeout(resolve, 500));
           }
           
-          // Modern browsers require user interaction before playing audio
+          // Play the audio
           await audio.play();
           setIsPlaying(true);
         }
       } catch (error) {
         console.error('Error playing audio:', error);
         setIsPlaying(false);
-        
-        // Show user-friendly error
-        alert('Unable to play background music. This might be due to browser restrictions or audio format compatibility.');
       }
     }
   };
