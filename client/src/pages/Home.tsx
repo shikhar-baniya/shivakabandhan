@@ -19,9 +19,17 @@ export default function Home() {
 
   // Add user interaction listener for immediate audio start
   useEffect(() => {
-    const handleUserInteraction = () => {
+    if (!audio || userInteracted) return;
+
+    const handleUserInteraction = (e: Event) => {
+      // Don't trigger if clicking on the music button itself
+      const target = e.target as HTMLElement;
+      if (target.closest('[data-music-button]')) {
+        return;
+      }
+
       setUserInteracted(true);
-      if (audio && !isPlaying) {
+      if (!isPlaying) {
         // Start playing audio immediately on first user interaction
         audio.play().then(() => {
           console.log('Audio started after user interaction');
@@ -29,7 +37,7 @@ export default function Home() {
       }
     };
 
-    // Listen for any user interaction to start audio
+    // Listen for any user interaction to start audio (except music button)
     document.addEventListener('click', handleUserInteraction, { once: true });
     document.addEventListener('touchstart', handleUserInteraction, { once: true });
     document.addEventListener('scroll', handleUserInteraction, { once: true });
@@ -41,7 +49,7 @@ export default function Home() {
       document.removeEventListener('scroll', handleUserInteraction);
       document.removeEventListener('keydown', handleUserInteraction);
     };
-  }, [audio, isPlaying]);
+  }, [audio, isPlaying, userInteracted]);
 
   useEffect(() => {
     // Set volume when audio is available
@@ -66,21 +74,20 @@ export default function Home() {
   }, [audio]);
 
   const toggleMusic = async () => {
-    if (audio) {
-      try {
-        if (isPlaying) {
-          // Pause the audio
-          audio.pause();
-          console.log('Audio paused');
-        } else {
-          // Play the audio
-          await audio.play();
-          console.log('Audio playing');
-        }
-      } catch (error) {
-        console.error('Error toggling audio:', error);
-        setIsPlaying(false);
+    if (!audio) return;
+    
+    try {
+      if (isPlaying) {
+        // Pause the audio
+        audio.pause();
+        console.log('Audio paused');
+      } else {
+        // Play the audio
+        await audio.play();
+        console.log('Audio playing');
       }
+    } catch (error) {
+      console.error('Error toggling audio:', error);
     }
   };
 
@@ -113,18 +120,11 @@ export default function Home() {
         src="/music.mp3"
         loop
         autoPlay
+        playsInline
         muted={false}
         style={{ display: 'none' }}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
-        onCanPlayThrough={() => {
-          // Try to play when ready
-          if (audio && !isPlaying) {
-            audio.play().catch(() => {
-              console.log('Autoplay blocked, waiting for user interaction');
-            });
-          }
-        }}
       />
       
       <NavBar />
@@ -678,11 +678,16 @@ function FloatingMusicPlayer({ isPlaying, onToggle }: { isPlaying: boolean; onTo
       animate={{ opacity: 1 }}
       transition={{ delay: 1 }}
       className="fixed bottom-8 right-8 z-40"
+      data-music-button
     >
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        onClick={onToggle}
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent event bubbling
+          onToggle();
+        }}
+        data-music-button
         className={`w-14 h-14 rounded-full glass-panel flex items-center justify-center backdrop-blur-lg border-2 transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)] ${
           isPlaying 
             ? 'border-primary/80 bg-primary/10' 
