@@ -5,7 +5,7 @@ import { EventCard } from "@/components/EventCard";
 import { Countdown } from "@/components/Countdown";
 import { EventSlide } from "@/components/EventSlide";
 import { Button } from "@/components/ui/button";
-import { MapPin, Heart, Music, Phone, Mail, Globe, MessageCircle, Menu, X, Volume2, VolumeX } from "lucide-react";
+import { Heart, MessageCircle, Menu, X, Volume2, VolumeX } from "lucide-react";
 
 export default function Home() {
   const { scrollY } = useScroll();
@@ -24,7 +24,7 @@ export default function Home() {
     const handleUserInteraction = (e: Event) => {
       // Don't trigger if clicking on the music button itself
       const target = e.target as HTMLElement;
-      if (target.closest('[data-music-button]')) {
+      if (target instanceof HTMLElement && target.closest('[data-music-button]')) {
         return;
       }
 
@@ -204,45 +204,122 @@ export default function Home() {
       {/* 2. DIVINE INTRODUCTION */}
       <section id="story" className="py-20 md:py-32 px-4 relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center relative z-10">
+          {/* Large background mandala - slow rotation */}
           <motion.div
             initial={{ rotate: 0, scale: 0.5, opacity: 0 }}
-            whileInView={{ rotate: 360, scale: 1, opacity: 0.15 }}
+            whileInView={{ rotate: 360, scale: 1, opacity: 0.12 }}
             transition={{ 
-              rotate: { duration: 30, repeat: Infinity, ease: "linear" },
+              rotate: { duration: 60, repeat: Infinity, ease: "linear" },
               scale: { duration: 2, ease: "easeOut" },
               opacity: { duration: 2, ease: "easeOut" }
             }}
-            className="absolute -top-32 -left-32 w-96 h-96 pointer-events-none"
+            className="absolute -top-20 -left-20 w-[500px] h-[500px] pointer-events-none"
           >
-            {/* Enhanced Mandala SVG */}
-            <svg viewBox="0 0 200 200" className="w-full h-full fill-current text-primary">
-              {/* Outer ring */}
-              <circle cx="100" cy="100" r="90" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.6" />
-              <circle cx="100" cy="100" r="75" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.4" />
-              <circle cx="100" cy="100" r="60" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.3" />
+            <svg viewBox="0 0 400 400" className="w-full h-full text-primary drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
+              <defs>
+                <radialGradient id="mandalaGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="currentColor" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="currentColor" stopOpacity="0.1" />
+                </radialGradient>
+              </defs>
+              {/* Outermost decorative ring */}
+              <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.3" />
+              <circle cx="200" cy="200" r="180" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.4" />
+              <circle cx="200" cy="200" r="165" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.3" />
               
-              {/* Petals - outer layer */}
+              {/* Outer lotus petals - 16 petals */}
+              {Array.from({ length: 16 }).map((_, i) => (
+                <g key={`lotus-outer-${i}`} transform={`rotate(${i * 22.5} 200 200)`}>
+                  <path d="M200 30 Q220 80 200 130 Q180 80 200 30" fill="currentColor" opacity="0.25" />
+                  <path d="M200 35 Q215 80 200 125 Q185 80 200 35" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.5" />
+                </g>
+              ))}
+              
+              {/* Middle decorative ring */}
+              <circle cx="200" cy="200" r="130" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.5" />
+              <circle cx="200" cy="200" r="125" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.3" strokeDasharray="4 4" />
+              
+              {/* Middle lotus petals - 12 petals */}
               {Array.from({ length: 12 }).map((_, i) => (
-                <g key={`outer-${i}`} transform={`rotate(${i * 30} 100 100)`}>
-                  <path d="M100 25 Q110 50 100 75 Q90 50 100 25" fill="currentColor" opacity="0.3" />
+                <g key={`lotus-mid-${i}`} transform={`rotate(${i * 30} 200 200)`}>
+                  <path d="M200 80 Q215 120 200 160 Q185 120 200 80" fill="currentColor" opacity="0.35" />
+                  <path d="M200 85 Q212 120 200 155 Q188 120 200 85" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.6" />
                 </g>
               ))}
               
-              {/* Petals - middle layer */}
+              {/* Inner decorative ring */}
+              <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.6" />
+              
+              {/* Inner lotus petals - 8 petals */}
               {Array.from({ length: 8 }).map((_, i) => (
-                <g key={`middle-${i}`} transform={`rotate(${i * 45 + 22.5} 100 100)`}>
-                  <path d="M100 40 Q105 60 100 80 Q95 60 100 40" fill="currentColor" opacity="0.4" />
+                <g key={`lotus-inner-${i}`} transform={`rotate(${i * 45} 200 200)`}>
+                  <path d="M200 120 Q210 150 200 180 Q190 150 200 120" fill="currentColor" opacity="0.45" />
                 </g>
               ))}
               
-              {/* Inner star */}
-              <path d="M100 50 L105 70 L125 70 L110 82 L115 102 L100 90 L85 102 L90 82 L75 70 L95 70 Z" fill="currentColor" opacity="0.5" />
+              {/* Center Om symbol area */}
+              <circle cx="200" cy="200" r="55" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.7" />
+              <circle cx="200" cy="200" r="40" fill="url(#mandalaGlow)" opacity="0.5" />
+              <circle cx="200" cy="200" r="25" fill="currentColor" opacity="0.6" />
+              <circle cx="200" cy="200" r="12" fill="currentColor" opacity="0.8" />
               
-              {/* Center circle */}
-              <circle cx="100" cy="100" r="15" fill="currentColor" opacity="0.6" />
-              <circle cx="100" cy="100" r="8" fill="currentColor" opacity="0.8" />
+              {/* Decorative dots around center */}
+              {Array.from({ length: 8 }).map((_, i) => (
+                <circle key={`dot-${i}`} cx={200 + 48 * Math.cos(i * Math.PI / 4)} cy={200 + 48 * Math.sin(i * Math.PI / 4)} r="3" fill="currentColor" opacity="0.7" />
+              ))}
             </svg>
           </motion.div>
+          
+          {/* Second mandala - opposite side, counter-rotation */}
+          <motion.div
+            initial={{ rotate: 360, scale: 0.5, opacity: 0 }}
+            whileInView={{ rotate: 0, scale: 1, opacity: 0.08 }}
+            transition={{ 
+              rotate: { duration: 80, repeat: Infinity, ease: "linear" },
+              scale: { duration: 2, ease: "easeOut" },
+              opacity: { duration: 2, ease: "easeOut" }
+            }}
+            className="absolute -bottom-32 -right-32 w-[400px] h-[400px] pointer-events-none"
+          >
+            <svg viewBox="0 0 400 400" className="w-full h-full text-primary/70 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+              <circle cx="200" cy="200" r="180" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.4" />
+              {Array.from({ length: 12 }).map((_, i) => (
+                <g key={`petal-${i}`} transform={`rotate(${i * 30} 200 200)`}>
+                  <path d="M200 40 Q225 100 200 160 Q175 100 200 40" fill="currentColor" opacity="0.3" />
+                </g>
+              ))}
+              <circle cx="200" cy="200" r="100" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.5" />
+              {Array.from({ length: 6 }).map((_, i) => (
+                <g key={`inner-${i}`} transform={`rotate(${i * 60} 200 200)`}>
+                  <path d="M200 110 Q210 140 200 170 Q190 140 200 110" fill="currentColor" opacity="0.4" />
+                </g>
+              ))}
+              <circle cx="200" cy="200" r="35" fill="currentColor" opacity="0.5" />
+            </svg>
+          </motion.div>
+          
+          {/* Floating particles effect */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <motion.div
+                key={`particle-${i}`}
+                className="absolute w-1 h-1 bg-primary/40 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  y: [0, -30, 0],
+                  opacity: [0.2, 0.6, 0.2],
+                }}
+                transition={{
+                  duration: 3 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                }}
+              />
+            ))}
+          </div>
           
           <SectionHeading 
             title="A Divine Union" 
@@ -257,7 +334,7 @@ export default function Home() {
               className="relative aspect-[3/4] rounded-t-full overflow-hidden border-4 border-primary/20 shadow-2xl"
             >
               <img 
-                src="https://images.unsplash.com/photo-1621621667797-e06afc217fb0?auto=format&fit=crop&q=80&w=800" 
+                src="/img/main.JPG" 
                 alt="Couple Moment" 
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
@@ -332,135 +409,115 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. GALLERY PREVIEW */}
-      <section id="gallery" className="py-20 px-4">
-        <SectionHeading title="Captured Moments" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto auto-rows-[200px]">
-          {[
-            "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500&q=80",
-            "https://images.unsplash.com/photo-1623868516896-1200f8983792?w=500&q=80",
-            "https://images.unsplash.com/photo-1595521914995-1e479c38c82a?w=500&q=80",
-            "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=500&q=80"
-          ].map((src, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ scale: 1.05, zIndex: 10 }}
-              className={`rounded-xl overflow-hidden shadow-lg cursor-pointer relative group ${i === 0 || i === 3 ? 'md:col-span-2 md:row-span-2' : ''}`}
-            >
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/0 transition-colors duration-300 z-10" />
-              <img src={src} alt="Gallery" className="w-full h-full object-cover" />
-            </motion.div>
-          ))}
-        </div>
+      {/* 4. GALLERY PREVIEW - Stacked Photo Cards */}
+      <section id="gallery" className="py-24 px-4 relative overflow-hidden">
+        <SectionHeading title="Captured Moments" subtitle="Swipe through our cherished memories" />
+        <StackedPhotoGallery />
       </section>
 
-      {/* 5. ATTIRE THEME */}
-      <section id="theme" className="py-20 px-4 relative overflow-hidden bg-black/40">
-        <div className="max-w-full mx-auto relative z-10 mb-12">
-          <SectionHeading title="Dress Code Theme" subtitle="Be part of our coordinated celebration with these beautiful color themes" />
-        </div>
+      {/* 5. ATTIRE THEME - Elegant Design */}
+      <section id="theme" className="py-24 px-4 relative overflow-hidden">
+        {/* Decorative background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-transparent to-primary/40" />
         
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-          {/* Mehandi */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="glass-panel p-6 rounded-2xl"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-600 to-green-400 flex items-center justify-center">
-                <span className="text-xl">🌿</span>
-              </div>
-              <h3 className="text-2xl font-serif text-white">Mehandi</h3>
+        <div className="max-w-5xl mx-auto relative z-10">
+          <SectionHeading title="Dress Code" subtitle="Dress to match the celebration's colors" />
+          
+          <div className="mt-16 space-y-6">
+            {[
+              {
+                event: "Mehandi",
+                colors: ["#22c55e", "#4ade80", "#86efac"],
+                description: "Shades of Green",
+                tagline: "Celebrate with lush green hues"
+              },
+              {
+                event: "Haldi",
+                colors: ["#eab308", "#facc15", "#fde047"],
+                description: "Sunshine Yellow",
+                details: ["Bridesmaids: Pastel peach-pink", "Family: Peach-pink & yellow combo"],
+                tagline: "Bright as the morning sun"
+              },
+              {
+                event: "Sangeet",
+                colors: ["#a855f7", "#d946ef", "#f0abfc"],
+                description: "Shimmery Indo-Western",
+                tagline: "Let your outfit sparkle"
+              },
+              {
+                event: "Reception",
+                colors: ["#fcd9b6", "#fed7aa", "#fef3c7"],
+                description: "Beige & Pastels",
+                details: ["Bridesmaids & Family: Beige-offwhite mix", "Others: Ethnic pastels"],
+                tagline: "Elegant and refined"
+              },
+              {
+                event: "Fere",
+                colors: ["#dc2626", "#ef4444", "#f87171"],
+                description: "Pure Traditional",
+                details: ["Ladies: Maharashtrian Nath recommended"],
+                tagline: "Honor the sacred ceremony"
+              }
+            ].map((item, index) => (
+              <motion.div
+                key={item.event}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="group"
+              >
+                <div className="relative flex flex-col md:flex-row items-center gap-6 p-6 rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.05] hover:border-primary/30 transition-all duration-500">
+                  {/* Color palette circles */}
+                  <div className="flex items-center gap-2 md:w-32 shrink-0">
+                    {item.colors.map((color, i) => (
+                      <motion.div
+                        key={i}
+                        className="w-10 h-10 md:w-8 md:h-8 rounded-full shadow-lg ring-2 ring-white/20"
+                        style={{ backgroundColor: color }}
+                        whileHover={{ scale: 1.2, y: -5 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Divider */}
+                  <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-primary/40 to-transparent" />
+                  
+                  {/* Content */}
+                  <div className="flex-1 text-center md:text-left">
+                    <h3 className="text-2xl font-serif text-white mb-1 group-hover:text-primary transition-colors">
+                      {item.event}
+                    </h3>
+                    <p className="text-primary/90 font-medium text-lg">{item.description}</p>
+                    {item.details && (
+                      <div className="mt-2 flex flex-wrap gap-2 justify-center md:justify-start">
+                        {item.details.map((detail, i) => (
+                          <span key={i} className="text-xs text-white/60 bg-white/5 px-3 py-1 rounded-full">
+                            {detail}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Tagline */}
+                  <p className="text-sm text-white/40 italic font-serif md:w-40 text-center md:text-right shrink-0">
+                    {item.tagline}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* Bottom decorative element */}
+          <div className="mt-12 flex justify-center">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-px bg-gradient-to-r from-transparent to-primary/50" />
+              <Heart size={16} className="text-primary/50" />
+              <div className="w-12 h-px bg-gradient-to-l from-transparent to-primary/50" />
             </div>
-            <div className="space-y-2">
-              <p className="text-white/80"><span className="text-primary">💃 Others:</span> Shades of green</p>
-              <p className="text-xs text-white/50 mt-4 italic">Celebrate with lush green hues!</p>
-            </div>
-          </motion.div>
-
-          {/* Haldi */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="glass-panel p-6 rounded-2xl"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-300 flex items-center justify-center">
-                <span className="text-xl">🌼</span>
-              </div>
-              <h3 className="text-2xl font-serif text-white">Haldi</h3>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <p className="text-white/80"><span className="text-primary">💐 Bridesmaids:</span> Pastel peach-pink</p>
-                <p className="text-white/80"><span className="text-primary">👨‍👩‍👧‍👦 Family:</span> Pastel peach-pink & yellow combo</p>
-                <p className="text-white/80"><span className="text-primary">🌞 Others:</span> Shades of sunshine yellow</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Sangeet */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="glass-panel p-6 rounded-2xl"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-pink-400 flex items-center justify-center">
-                <span className="text-xl">💫</span>
-              </div>
-              <h3 className="text-2xl font-serif text-white">Sangeet</h3>
-            </div>
-            <div className="space-y-2">
-              <p className="text-white/80"><span className="text-primary">✨ Others:</span> Shimmery / glittery Indo-western outfits</p>
-              <p className="text-xs text-white/50 mt-4 italic">Let your outfit sparkle!</p>
-            </div>
-          </motion.div>
-
-          {/* Reception / Jaimal */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="glass-panel p-6 rounded-2xl"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-200 to-orange-200 flex items-center justify-center">
-                <span className="text-xl">❤️</span>
-              </div>
-              <h3 className="text-2xl font-serif text-white">Reception / Jaimal</h3>
-            </div>
-            <div className="space-y-2">
-              <p className="text-white/80"><span className="text-primary">💃 Bridesmaids & Family:</span> Beige-offwhite mix</p>
-              <p className="text-white/80"><span className="text-primary">🌸 Others:</span> Ethnic wear in pastel shades</p>
-            </div>
-          </motion.div>
-
-          {/* Fere (Wedding Ceremony) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="glass-panel p-6 rounded-2xl lg:col-span-2 md:col-span-1"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-600 to-pink-500 flex items-center justify-center">
-                <span className="text-xl">🪔</span>
-              </div>
-              <h3 className="text-2xl font-serif text-white">Fere (Wedding Ceremony)</h3>
-            </div>
-            <div className="space-y-2">
-              <p className="text-white/80"><span className="text-primary">👗 Everyone:</span> Pure traditional attire</p>
-              <p className="text-white/80"><span className="text-primary">💫 Add-ons:</span> Maharashtrian Nath for ladies</p>
-            </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -520,21 +577,21 @@ export default function Home() {
       </section>
       
       {/* 6. Footer */}
-      <footer className="bg-black/80 text-white py-12 border-t border-white/10">
+      <footer className="bg-black/80 text-white py-16 border-t border-white/10">
         <div className="container mx-auto px-4 text-center">
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            className="mb-8"
+            className="mb-6"
           >
-            <h2 className="text-3xl font-script text-primary mb-2">Sada Suhagan Raho</h2>
-            <p className="text-white/60 text-sm">May you always remain happily married</p>
+            <h2 className="text-4xl font-script text-primary mb-3">Sada Suhagan Raho</h2>
+            <p className="text-white/60 text-sm font-serif italic">May you always remain happily married</p>
           </motion.div>
           
-          <div className="flex justify-center gap-8 mb-8">
-            <SocialIcon icon={<Phone size={20} />} href="tel:+1234567890" />
-            <SocialIcon icon={<Mail size={20} />} href="mailto:wedding@aaravdiya.com" />
-            <SocialIcon icon={<Globe size={20} />} href="#" />
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-primary/40" />
+            <Heart size={14} className="text-primary/50" />
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-primary/40" />
           </div>
           
           <p className="text-xs text-white/30 uppercase tracking-widest">
@@ -592,17 +649,6 @@ function NavBar() {
         </Button>
       </div>
     </motion.nav>
-  );
-}
-
-function SocialIcon({ icon, href }: { icon: React.ReactNode; href: string }) {
-  return (
-    <a 
-      href={href} 
-      className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-background transition-all duration-300"
-    >
-      {icon}
-    </a>
   );
 }
 
@@ -701,5 +747,219 @@ function FloatingMusicPlayer({ isPlaying, onToggle }: { isPlaying: boolean; onTo
         )}
       </motion.button>
     </motion.div>
+  );
+}
+
+function StackedPhotoGallery() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  
+  const photos = [
+    {
+      src: "/img/slider/095A1665.JPG",
+      caption: "Where it all began"
+    },
+    {
+      src: "/img/slider/095A1668.JPG",
+      caption: "Our first dance"
+    },
+    {
+      src: "/img/slider/095A1676.JPG",
+      caption: "Golden moments"
+    },
+    {
+      src: "/img/slider/095A1683.JPG",
+      caption: "Joyful laughter"
+    },
+    {
+      src: "/img/slider/095A1684.JPG",
+      caption: "Together forever"
+    },
+    {
+      src: "/img/slider/095A1688.JPG",
+      caption: "Forever yours"
+    },
+    {
+      src: "/img/slider/095A1689.JPG",
+      caption: "Love in bloom"
+    },
+    {
+      src: "/img/slider/095A1707.JPG",
+      caption: "Sacred moments"
+    },
+    {
+      src: "/img/slider/095A1759.JPG",
+      caption: "Divine celebration"
+    },
+    {
+      src: "/img/slider/095A1784.JPG",
+      caption: "Blessed union"
+    },
+    {
+      src: "/img/slider/095A1789.JPG",
+      caption: "Eternal bond"
+    },
+    {
+      src: "/img/slider/095A1902.JPG",
+      caption: "Hearts entwined"
+    },
+    {
+      src: "/img/slider/095A1917.JPG",
+      caption: "Perfect harmony"
+    },
+    {
+      src: "/img/slider/095A1948.JPG",
+      caption: "Moments of joy"
+    },
+    {
+      src: "/img/slider/095A1974.JPG",
+      caption: "Radiant beauty"
+    },
+    {
+      src: "/img/slider/095A1991.JPG",
+      caption: "Sweet embrace"
+    },
+    {
+      src: "/img/slider/095A2011.JPG",
+      caption: "Divine love"
+    },
+    {
+      src: "/img/slider/095A2029.JPG",
+      caption: "Cherished memories"
+    },
+    {
+      src: "/img/slider/095A2036.JPG",
+      caption: "Joyful celebration"
+    },
+    {
+      src: "/img/slider/095A2133.JPG",
+      caption: "Unforgettable moments"
+    },
+    {
+      src: "/img/slider/095A2137.JPG",
+      caption: "Timeless love"
+    },
+    {
+      src: "/img/slider/095A2146.JPG",
+      caption: "Our love story"
+    }
+  ];
+
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => Math.abs(offset) * velocity;
+
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    setCurrentIndex((prev) => (prev + newDirection + photos.length) % photos.length);
+  };
+
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.8,
+      rotateY: direction > 0 ? 45 : -45,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      rotateY: 0,
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.8,
+      rotateY: direction < 0 ? 45 : -45,
+    }),
+  };
+
+  return (
+    <div className="max-w-lg mx-auto mt-12">
+      {/* Main card stack */}
+      <div className="relative h-[450px] md:h-[500px] perspective-1000">
+        {/* Background stacked cards effect */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute w-[85%] h-[90%] bg-white/5 rounded-2xl transform rotate-[-6deg] translate-y-2 border border-white/10" />
+          <div className="absolute w-[90%] h-[93%] bg-white/5 rounded-2xl transform rotate-[-3deg] translate-y-1 border border-white/10" />
+        </div>
+        
+        {/* Main swipeable card */}
+        <AnimatePresence initial={false} custom={direction} mode="wait">
+          <motion.div
+            key={currentIndex}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+              rotateY: { duration: 0.4 },
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(_, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+            className="absolute inset-0 cursor-grab active:cursor-grabbing"
+          >
+            <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-primary/20 shadow-[0_20px_60px_rgba(0,0,0,0.4)] bg-black/20">
+              <img
+                src={photos[currentIndex].src}
+                alt={photos[currentIndex].caption}
+                className="w-full h-full object-cover"
+                draggable={false}
+              />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+              
+              {/* Caption */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="absolute bottom-0 left-0 right-0 p-6 text-center"
+              >
+                <p className="text-2xl font-script text-primary mb-2">{photos[currentIndex].caption}</p>
+                <p className="text-white/50 text-sm">{currentIndex + 1} / {photos.length}</p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Navigation dots */}
+      <div className="flex justify-center gap-2 mt-6">
+        {photos.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setDirection(index > currentIndex ? 1 : -1);
+              setCurrentIndex(index);
+            }}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentIndex 
+                ? 'bg-primary w-6' 
+                : 'bg-white/30 hover:bg-white/50'
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Swipe hint */}
+      <p className="text-center text-white/40 text-sm mt-4 font-serif">
+        Swipe or tap dots to navigate
+      </p>
+    </div>
   );
 }
