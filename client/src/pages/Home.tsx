@@ -105,7 +105,7 @@ export default function Home() {
   const getWhatsAppLink = () => {
     const message = `Hello Shikha and Varun! ${getRsvpMessage()}`;
     const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/919876543210?text=${encodedMessage}`;
+    return `https://wa.me/919673903968?text=${encodedMessage}`;
   };
 
   return (
@@ -374,35 +374,35 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-10 max-w-6xl mx-auto">
             <EventCard 
-              title="Mehendi & Sangeet"
-              date="December 11th, 2025"
+              title="Mehendi Night"
+              date="February 22nd, 2026"
               time="4:00 PM onwards"
-              location="The Oberoi Udaivilas, Garden Lawns"
-              description="An evening of henna, folk songs, and choreographed dances. Colorful attire recommended!"
+              location="Our Home"
+              description="An auspicious evening of sacred henna and heartfelt blessings, marking the joyful beginning of the wedding celebrations."
               delay={0}
             />
             <EventCard 
               title="Haldi Ceremony"
-              date="December 12th, 2025"
+              date="February 23rd, 2026"
               time="10:00 AM"
-              location="Poolside Pavilion"
+              location="Our Home"
               description="A playful morning smearing turmeric paste to bless the couple. Dress in shades of yellow."
               delay={0.2}
             />
             <EventCard 
-              title="The Wedding (Pheras)"
-              date="December 12th, 2025"
-              time="7:00 PM (Baraat at 6:00 PM)"
-              location="Zenana Mahal Courtyard"
-              description="The sacred union performed under the moonlight. Traditional Indian attire."
+              title="The Sangeet Night"
+              date="February 23rd, 2026"
+              time="6.30 PM"
+              location="The Prime Park, Amravati"
+              description="A joyous evening of song and rhythm, uniting two families in celebration of love and togetherness."
               delay={0.4}
             />
             <EventCard 
-              title="Grand Reception"
-              date="December 13th, 2025"
-              time="7:30 PM onwards"
-              location="Manek Chowk"
-              description="A formal evening of dinner and toasts to celebrate the newlyweds. Formal or Black Tie."
+              title="The Wedding (Varmala)"
+              date="February 24th, 2026"
+              time="8.00 AM onwards"
+              location="The Prime Park, Amravati"
+              description="A formal morning of dinner and toasts to celebrate the newlyweds. Traditional Attire"
               delay={0.6}
             />
           </div>
@@ -446,14 +446,14 @@ export default function Home() {
                 tagline: "Let your outfit sparkle"
               },
               {
-                event: "Reception",
+                event: "Wedding (Varmala)",
                 colors: ["#fcd9b6", "#fed7aa", "#fef3c7"],
                 description: "Beige & Pastels",
                 details: ["Bridesmaids & Family: Beige-offwhite mix", "Others: Ethnic pastels"],
                 tagline: "Elegant and refined"
               },
               {
-                event: "Fere",
+                event: "Phere",
                 colors: ["#dc2626", "#ef4444", "#f87171"],
                 description: "Pure Traditional",
                 details: ["Ladies: Maharashtrian Nath recommended"],
@@ -570,7 +570,7 @@ export default function Home() {
             </motion.a>
 
             <p className="text-sm text-white/50 mt-4">
-              Or call us at <span className="text-primary font-semibold">+91 98765 43210</span>
+              Or call us at <span className="text-primary font-semibold">+91 9673903968</span>
             </p>
           </motion.div>
         </div>
